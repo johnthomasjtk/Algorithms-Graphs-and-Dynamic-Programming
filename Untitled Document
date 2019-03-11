@@ -1,0 +1,45 @@
+The topological sort of the first graph is:
+VERTEX	NUMBER
+A		1
+B		2
+E		3
+D		4
+C		5
+G		6
+F		7
+
+
+For the second graph:
+Shortest paths for the first vertex:
+
+Shortest path from A to A Distance: 0 (A -> A)
+Shortest path from A to B Distance: 2 (A -> B)
+Shortest path from A to C Distance: 3 (A -> D-> C)
+Shortest path from A to D Distance: 1 (A -> D)
+Shortest path from A to E Distance: 3 (A -> D-> E)
+Shortest path from A to F Distance: 6 (A -> D-> G-> F)
+Shortest path from A to G Distance: 5 (A -> D-> G)
+
+
+The edges in the minimum spanning tree for the third graph are:
+(G, F, 1)
+(A, D, 1)
+(D, C, 2)
+(A, B, 2)
+(D, G, 4)
+(E, G, 6)
+Its cost is 16
+
+
+For the fourth graph, the articulation points are:
+D
+C (root of the dfs tree)
+
+
+For the fifth graph, the articulation points are:
+D
+C
+
+
+The strongly connected components of the sixth graph are:
+{D E G }	{A C B F }	

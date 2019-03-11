@@ -1,35 +1,28 @@
-import header
 import heapq
-INP_FILE = "../graphs/graph_qKruskal.dat"
+import header
 
 
-def graphToHeap(graph):
-    edgesHeap = list(graph.edges.values())
-    heapq.heapify(edgesHeap)
-    return edgesHeap
+def graphToHeap(graph):                     # This function creates a min heap out of the edges of a graph
+    edgesHeap = list(graph.edges.values())  # create a list (array) of all the Edge objects of a graph
+    heapq.heapify(edgesHeap)                # create a min heap of the edges (the same array is used to store the heap)..
+    return edgesHeap                        # ..and return it
 
 
-def kruskal(graph):
-    uf = header.UnionFind(graph.vertexCount)    # the union find object...
-    edgesHeap = graphToHeap(graph)              # a heap of all the edges
-    edgesAccepted = 0
-    cost = 0
+def kruskal(graph, fout):                       # Performs the Kruskal's algo on the input graph and writes it to fout
+    uf = header.UnionFind(graph.vertexCount)    # the union find object, we specify the number of nodes to the ctor
+    edgesHeap = graphToHeap(graph)              # create a heap of all the edges
+    edgesAccepted = 0                           # keeps track of how many edges are accepted
+    cost = 0                                    # keeps track of the total cost of the resultant MST
 
-    print("Edges in the MST are:-")
-    while edgesAccepted != graph.vertexCount - 1:
-        minEdge = heapq.heappop(edgesHeap)
+    fout.write("The edges in the minimum spanning tree for the third graph are:\n")
+    while edgesAccepted != graph.vertexCount - 1:   # the number of edges in the MST is one less than the number of vertices.
+                                                    # So, stop after (vertexCount - 1) edges have been accepted
+        minEdge = heapq.heappop(edgesHeap)          # get the next edge with the least weight
 
-        if not uf.connected(minEdge.src.number, minEdge.dest.number):
-            uf.unify(minEdge.src.number, minEdge.dest.number)
-            print(minEdge.src.name, " -> ", minEdge.dest.name, " (", minEdge.weight, ")", sep="")
-            cost += minEdge.weight
-            edgesAccepted += 1
+        if not uf.connected(minEdge.src.number, minEdge.dest.number):   # this is the find operation. If adding this edge
+            edgesAccepted += 1                      # to the partially created MST does not create cycles, then accept it
+            uf.unify(minEdge.src.number, minEdge.dest.number)           # unify the edge to the partial MST graph (union operation)
+            fout.write("(" + minEdge.src.name + ", " + minEdge.dest.name + ", " + str(minEdge.weight) + ")\n")
+            cost += minEdge.weight                  # write the details of the edge to the file and increment the cost..
 
-    print("Total cost is", cost)
-
-
-fin = open(INP_FILE, "r")
-NUMBER_OF_VERTICES= int(fin.readline().split()[0])
-g = header.Graph(fin, NUMBER_OF_VERTICES)
-fin.close()
-kruskal(g)
+    fout.write("Its cost is " + str(cost) + "\n\n")     # write the final cost of the MST to file
